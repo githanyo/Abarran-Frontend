@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.form-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+}
+
+button {
+  background: green;
+  color: white;
+  padding: 10px;
+  border: none;
+  margin-top: 15px;
+  width: 100%;
+}
+
+small {
+  color: red;
+}
+
+.success {
+  color: green;
+}
+
+.hero {
+  background: #2f7d32;
+  color: white;
+  padding: 60px;
+  text-align: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1b5e20;
+  padding: 15px 30px;
+}
+
+.logo {
+  color: white;
+  font-size: 20px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-links a.active {
+  border-bottom: 2px solid #a5d6a7;
+
+}
+
+.footer {
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+.card{
+  box-shadow: 5px 5px 5px hsla(0, 0%, 50%, 0.562);
+}
+.card:hover{
+  background: hsl(124, 43%, 82%);
+}
