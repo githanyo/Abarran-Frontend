@@ -81,3 +81,10 @@ small {
 .card:hover{
   background: hsl(124, 43%, 82%);
 }
+
+.logo {
+  height: 150px;
+  margin-bottom: 10px;
+  display: inline-block;
+  border-radius: 50%;
+}

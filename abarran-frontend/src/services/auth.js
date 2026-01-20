@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://your-backend.onrender.com/api";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getAccessToken = () =>
   localStorage.getItem("access_token");
@@ -14,18 +14,23 @@ export const setTokens = (access, refresh) => {
 };
 
 export const logout = () => {
-  localStorage.removeItem("access_token");
-  localStorage.removeItem("refresh_token");
+  localStorage.clear();
   window.location.href = "/admin/login";
 };
 
 export const refreshAccessToken = async () => {
+  const refresh = getRefreshToken();
+  if (!refresh) {
+    logout();
+    throw new Error("No refresh token");
+  }
+
   try {
     const res = await axios.post(`${BASE_URL}/token/refresh/`, {
-      refresh: getRefreshToken(),
+      refresh,
     });
 
-    setTokens(res.data.access, getRefreshToken());
+    setTokens(res.data.access, refresh);
     return res.data.access;
   } catch {
     logout();

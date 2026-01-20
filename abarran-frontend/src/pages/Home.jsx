@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-
+import logo from "../assets/logo.png";
 function Home() {
   return (
     <div>
       {/* Hero */}
       <section className="bg-green-700 text-white text-center py-20 px-4">
         <h1 className="text-4xl font-bold mb-4">
-          🌴Abarran🌴 <br /> 1 Billion Tree Project
+          <img src={logo} alt="Abarran Logo" className="logo" /><br />Abarran <br /> 1 Billion Tree Project
         </h1>
         <p className="mb-6">
           Empowering farmers through sustainable tree planting

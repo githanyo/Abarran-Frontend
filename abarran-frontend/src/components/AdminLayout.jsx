@@ -1,3 +1,11 @@
+import { getUserRole } from "../services/user";
+
+const role = getUserRole();
+
+{role === "admin" && (
+  <a href="/admin/farmers">Farmers</a>
+)}
+
 
 function AdminLayout({ children }) {
   return (
