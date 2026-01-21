@@ -16,14 +16,18 @@ input, select, textarea {
 }
 
 button {
-  background: green;
+  background: hsl(124, 55%, 24%);
   color: white;
   padding: 10px;
   border: none;
   margin-top: 15px;
   width: 100%;
+  border-radius: 15px;
 }
-
+button:hover {
+  background: hsl(124, 55%, 34%);
+  cursor: pointer;
+}
 small {
   color: red;
 }
@@ -43,7 +47,7 @@ small {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #1b5e20;
+  background: hsl(124, 55%, 24%);
   padding: 15px 30px;
 }
 

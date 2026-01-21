@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/AdminLayout";
 import { fetchFarmerById } from "../../services/api";
 import { updateFarmer, deleteFarmer } from "../../services/api";
+import Spinner from "../../components/Spinner";
 
 function FarmerDetail() {
   const { id } = useParams();
