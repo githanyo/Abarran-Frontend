@@ -95,7 +95,7 @@ function FarmersList() {
                         onClick={() => navigate(`/admin/farmers/${f.id}`)}
                         className="text-green-700 hover:underline"
                       >
-                        View
+                        <b className="text-white">View</b>
                       </button>
                     </td>
                   </tr>
