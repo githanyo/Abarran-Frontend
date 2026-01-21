@@ -23,24 +23,20 @@ function FarmersList() {
       try {
         const res = await fetchFarmers(page, search);
 
-        /**
-         * ✅ Normalize backend response
-         * Supports:
-         * - Paginated { results, count }
-         * - Plain array []
-         */
-        if (Array.isArray(res.data)) {
-          setFarmers(res.data);
-          setCount(res.data.length);
-        } else {
-          setFarmers(res.data?.results ?? []);
-          setCount(res.data?.count ?? 0);
-        }
+        // ✅ SAFELY normalize backend response
+        const results = Array.isArray(res.data?.results)
+          ? res.data.results
+          : Array.isArray(res.data)
+          ? res.data
+          : [];
+
+        setFarmers(results);
+        setCount(res.data?.count ?? results.length);
       } catch (err) {
-        console.error("Failed to load farmers:", err);
-        setError("Failed to load farmers. Please try again.");
+        console.error("Farmers fetch error:", err);
         setFarmers([]);
         setCount(0);
+        setError("Failed to load farmers");
       } finally {
         setLoading(false);
       }
@@ -55,7 +51,6 @@ function FarmersList() {
     <AdminLayout>
       <h1 className="text-2xl font-bold mb-4">Registered Farmers</h1>
 
-      {/* Search */}
       <input
         type="text"
         placeholder="Search by name, phone or district..."
@@ -68,16 +63,15 @@ function FarmersList() {
       />
 
       {loading && <Spinner />}
+      {error && <ErrorMessage message={error} />}
 
-      {!loading && error && <ErrorMessage message={error} />}
-
-      {!loading && !error && farmers.length === 0 && (
+      {!loading && farmers.length === 0 && !error && (
         <p className="text-gray-500 text-center py-6">
           No farmers found.
         </p>
       )}
 
-      {!loading && !error && farmers.length > 0 && (
+      {!loading && farmers.length > 0 && (
         <>
           <div className="overflow-x-auto bg-white rounded shadow">
             <table className="min-w-full text-sm">
@@ -97,7 +91,9 @@ function FarmersList() {
                     <td className="p-3">{f.district}</td>
                     <td className="p-3">
                       <button
-                        onClick={() => navigate(`/admin/farmers/${f.id}`)}
+                        onClick={() =>
+                          navigate(`/admin/farmers/${f.id}`)
+                        }
                         className="text-green-700 hover:underline"
                       >
                         View
@@ -109,7 +105,6 @@ function FarmersList() {
             </table>
           </div>
 
-          {/* Pagination */}
           <div className="flex justify-between items-center mt-4">
             <button
               disabled={page === 1}
