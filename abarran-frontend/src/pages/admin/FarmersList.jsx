@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/AdminLayout";
 import { fetchFarmers } from "../../services/api";
-import { useNavigate } from "react-router-dom";
 import Spinner from "../../components/Spinner";
 import ErrorMessage from "../../components/ErrorMessage";
 
 function FarmersList() {
   const [farmers, setFarmers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const PAGE_SIZE = 10;
 
   useEffect(() => {
     const loadFarmers = async () => {
@@ -23,19 +24,19 @@ function FarmersList() {
       try {
         const res = await fetchFarmers(page, search);
 
-        // ✅ SAFELY normalize backend response
-        const results = Array.isArray(res.data?.results)
-          ? res.data.results
-          : Array.isArray(res.data)
-          ? res.data
-          : [];
-
-        setFarmers(results);
-        setCount(res.data?.count ?? results.length);
+        // ✅ SAFE RESPONSE HANDLING
+        if (Array.isArray(res.data)) {
+          // Non-paginated backend
+          setFarmers(res.data);
+          setCount(res.data.length);
+        } else {
+          // Paginated backend
+          setFarmers(res.data?.results ?? []);
+          setCount(res.data?.count ?? 0);
+        }
       } catch (err) {
         console.error("Farmers fetch error:", err);
         setFarmers([]);
-        setCount(0);
         setError("Failed to load farmers");
       } finally {
         setLoading(false);
@@ -45,7 +46,7 @@ function FarmersList() {
     loadFarmers();
   }, [page, search]);
 
-  const totalPages = Math.max(1, Math.ceil(count / 10));
+  const totalPages = Math.max(1, Math.ceil(count / PAGE_SIZE));
 
   return (
     <AdminLayout>
@@ -65,13 +66,13 @@ function FarmersList() {
       {loading && <Spinner />}
       {error && <ErrorMessage message={error} />}
 
-      {!loading && farmers.length === 0 && !error && (
+      {!loading && !error && farmers.length === 0 && (
         <p className="text-gray-500 text-center py-6">
           No farmers found.
         </p>
       )}
 
-      {!loading && farmers.length > 0 && (
+      {!loading && !error && farmers.length > 0 && (
         <>
           <div className="overflow-x-auto bg-white rounded shadow">
             <table className="min-w-full text-sm">
@@ -91,9 +92,7 @@ function FarmersList() {
                     <td className="p-3">{f.district}</td>
                     <td className="p-3">
                       <button
-                        onClick={() =>
-                          navigate(`/admin/farmers/${f.id}`)
-                        }
+                        onClick={() => navigate(`/admin/farmers/${f.id}`)}
                         className="text-green-700 hover:underline"
                       >
                         View
